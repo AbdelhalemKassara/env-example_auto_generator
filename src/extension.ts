@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { URI } from 'vscode-uri';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -35,8 +36,15 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//runs whenever the user saves a file (also runs when the file is autosaved)
 	const disposable4 = vscode.workspace.onDidSaveTextDocument((e) => {
-		out.appendLine(e.fileName);//gets the file path and name
-		out.appendLine(e.getText());//gets the content of the file
+		// out.appendLine(e.fileName);//gets the file path and name
+		
+		// out.appendLine(e.getText());//gets the content of the file
+		
+		let path: vscode.Uri = URI.parse("file://" + e.fileName + "-example");
+		vscode.workspace.fs.readFile(path).then((contents: Uint8Array) => {
+			let str: string = new TextDecoder().decode(contents);
+			out.appendLine(str);
+		});// add a .catch to create the file if it hasn't been created already
 
 	});
 ///////////////////////////////
@@ -44,11 +52,11 @@ export function activate(context: vscode.ExtensionContext) {
 // 
 ///////////////////////////////
 	//things to figure out:
-	//create and edit a file 
-		//check if a file already exists
+	//[ ]create and edit a file 
+		//[ ]check if a file already exists
 		//
-	//read the contents of a file that isn't open (the .env-example if there is one that already exists) (probably a function in the workspaces api)
-	//create a button prompts (just yes no questions)
+	//[x]read the contents of a file that isn't open (the .env-example if there is one that already exists) (probably a function in the workspaces api)
+	//[ ]create a button prompts (just yes no questions)
 	
 	//things to store temporarily:
 		//which .env and .env-example files I can create a .env-example and/or edit the .env-example
