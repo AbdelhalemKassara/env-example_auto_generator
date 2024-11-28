@@ -36,27 +36,68 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//runs whenever the user saves a file (also runs when the file is autosaved)
 	const disposable4 = vscode.workspace.onDidSaveTextDocument((e) => {
-		// out.appendLine(e.fileName);//gets the file path and name
+		// out.appendLine(e.fileName)s;//gets the file path and name
 		
 		// out.appendLine(e.getText());//gets the content of the file
 		
 		let path: vscode.Uri = URI.parse("file://" + e.fileName + "-example");
-		vscode.workspace.fs.readFile(path).then((contents: Uint8Array) => {
-			let str: string = new TextDecoder().decode(contents);
-			out.appendLine(str);
-		});// add a .catch to create the file if it hasn't been created already
+		vscode.workspace.fs.readFile(path)
+			.then((contents: Uint8Array) => {
+				let str: string = new TextDecoder().decode(contents);
+				out.appendLine(str);
+			},
+			() => {
+				out.appendLine('file not found');
+			});// add a .catch to create the file if it hasn't been created already
 
+			(async () => {
+				let hasFile: boolean = false;
+
+				try {
+					let contents: Uint8Array = await vscode.workspace.fs.readFile(path);
+					let str: string = new TextDecoder().decode(contents);
+					hasFile = true;
+				} catch(e) {
+					hasFile = false;
+				}
+
+				out.appendLine(hasFile.toString());
+			})();
+
+			(async () => {
+				let hasFile: boolean = false;
+
+				try {
+					await vscode.workspace.fs.writeFile(path, new TextEncoder().encode(" test "));//this writes regardless if there is a file there or not
+				} catch(e: any) {
+					hasFile = false;
+					out.append(e.toString());
+				}
+
+				out.appendLine(hasFile.toString());
+			})();
+
+
+			(async () => {
+				vscode.window.showInformationMessage("do you want to do this", "yes", "no").then(answer => {
+					if(answer !== undefined) {
+						out.appendLine(answer);
+					} else {
+						out.appendLine("this returned undefined for some reason");
+					}
+				});
+			})();
 	});
 ///////////////////////////////
 // MOVE ALL OF THIS TO THE .env-example project repository
 // 
 ///////////////////////////////
 	//things to figure out:
-	//[ ]create and edit a file 
-		//[ ]check if a file already exists
+	//[x]create and edit a file 
+		//[ kinda ]check if a file already exists
 		//
 	//[x]read the contents of a file that isn't open (the .env-example if there is one that already exists) (probably a function in the workspaces api)
-	//[ ]create a button prompts (just yes no questions)
+	//[x]create a button prompts (just yes no questions)
 	
 	//things to store temporarily:
 		//which .env and .env-example files I can create a .env-example and/or edit the .env-example
