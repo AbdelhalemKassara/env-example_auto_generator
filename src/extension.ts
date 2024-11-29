@@ -44,11 +44,26 @@ export function activate(context: vscode.ExtensionContext) {
 		
 		//this code updates or creates the .env-example file
 		let fileContents: string = e.getText();
-		out.appendLine("updated .env-example.");
+		// out.appendLine(fileContents.split('\n').length.toString());
 
 	});
 
 	context.subscriptions.push(disposable4);
+
+	function removeValFromEnv(fileContents: string): string {
+		let contByLine: string[] = fileContents.split('\n');
+
+		let cleanContByLine: string[] = [];
+
+		//look for the first equal sign
+		//check if the text before it matches this regex [a-zA-Z_]+[a-zA-Z0-9_]*
+		//check if there is a single double or multiline key(can use both double or single quotes for this) (and remove those separatley)
+		//repeat for the next line
+
+		//for each character check if it is a hash-tag (#), if it is then move on to the next line
+		
+		return "";
+	}
 }
 
 // This method is called when your extension is deactivated
