@@ -50,11 +50,55 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable4);
 
+	enum stringTypes {
+		none,
+		multilineSingle,
+		multilineDouble,
+		single,
+		double
+	}
+
 	function removeValFromEnv(fileContents: string): string {
 		let contByLine: string[] = fileContents.split('\n');
 
+		let pattern = new RegExp("^[a-zA-Z_][a-zA-Z0-9_]*$");//double check this regex (also rename it)
+		let strType: stringTypes = stringTypes.none;
+
 		let cleanContByLine: string[] = [];
 
+
+		for(let line = 0; line < contByLine.length; line++) {
+			for(let char = 0; char < contByLine[line].length; char++) {
+				if(contByLine[line][char] === '#') {
+					cleanContByLine.push(contByLine[line].slice(char, contByLine[line].length-1)); //double check this is slicing properly
+					continue;
+				}
+				
+				if(contByLine[line][char] === '=') {
+					if(char === 0) {//probably don't need this with the regex underneath
+						throw new Error(`Invalid env file, line number ${line} shouldn't start with an equal sign.`);
+					}
+
+					
+					if(!pattern.test(contByLine[line].slice(0, char-1))) {
+						throw new Error(`Invalid env file, the variable name in line number ${line} is invalid.`);
+					} else {
+						cleanContByLine.push(contByLine[line].slice(0, char));
+					}
+
+					if(contByLine[line].length - char+1 >= 3) {
+						if(contByLine[line][char+1] === '"' && contByLine[line][char+2] === '"' && contByLine[line][char+3] ===  '"') {
+
+						} else if(contByLine[line][char+1] === "'" && contByLine[line][char+2] === "'" && contByLine[line][char+3] === "'") {
+								//toggle switch statement in main loop to process as multiline
+								//use enums
+						}
+					}
+				}
+
+
+			}
+		}
 		//look for the first equal sign
 		//check if the text before it matches this regex [a-zA-Z_]+[a-zA-Z0-9_]*
 		//check if there is a single double or multiline key(can use both double or single quotes for this) (and remove those separatley)
