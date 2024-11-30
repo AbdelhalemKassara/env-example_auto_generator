@@ -44,8 +44,15 @@ export function activate(context: vscode.ExtensionContext) {
 		
 		//this code updates or creates the .env-example file
 		let fileContents: string = e.getText();
-		// out.appendLine(fileContents.split('\n').length.toString());
 
+
+		// out.appendLine(fileContents.split('\n').length.toString());
+		try {
+			let path: vscode.Uri = URI.parse("file://" + e.fileName + "-example");
+			await vscode.workspace.fs.writeFile(path, new TextEncoder().encode(removeValFromEnv(fileContents)));//this writes regardless if there is a file there or not
+		} catch(e: any) {
+			out.append(e.toString());
+		}
 	});
 
 	context.subscriptions.push(disposable4);
@@ -55,7 +62,9 @@ export function activate(context: vscode.ExtensionContext) {
 		multilineSingle,
 		multilineDouble,
 		single,
-		double
+		double,
+		notQuote,
+		endOfSecret // use this when you have reached the end of the secret (it's to check if there is a comment there)
 	}
 
 	function removeValFromEnv(fileContents: string): string {
@@ -64,49 +73,101 @@ export function activate(context: vscode.ExtensionContext) {
 		let pattern = new RegExp("^[a-zA-Z_][a-zA-Z0-9_]*$");//double check this regex (also rename it)
 		let strType: stringTypes = stringTypes.none;
 
-		let cleanContByLine: string[] = [];
+		let cleanContByLine: string[] = new Array(contByLine.length).fill("");
 
 
 		for(let line = 0; line < contByLine.length; line++) {
 			for(let char = 0; char < contByLine[line].length; char++) {
 				if(contByLine[line][char] === '#') {
-					cleanContByLine.push(contByLine[line].slice(char, contByLine[line].length-1)); //double check this is slicing properly
-					continue;
+					cleanContByLine[line] += contByLine[line].slice(char, contByLine[line].length); //double check this is slicing properly
+
+					if(strType === stringTypes.single || strType === stringTypes.double) {
+						throw new Error(`Invalid env file, the string on line number ${line} does have a closing quote.`);
+					}
+					break;
 				}
 				
-				if(contByLine[line][char] === '=') {
-					if(char === 0) {//probably don't need this with the regex underneath
-						throw new Error(`Invalid env file, line number ${line} shouldn't start with an equal sign.`);
-					}
-
-					
-					if(!pattern.test(contByLine[line].slice(0, char-1))) {
-						throw new Error(`Invalid env file, the variable name in line number ${line} is invalid.`);
-					} else {
-						cleanContByLine.push(contByLine[line].slice(0, char));
-					}
-
-					if(contByLine[line].length - char+1 >= 3) {
-						if(contByLine[line][char+1] === '"' && contByLine[line][char+2] === '"' && contByLine[line][char+3] ===  '"') {
-
-						} else if(contByLine[line][char+1] === "'" && contByLine[line][char+2] === "'" && contByLine[line][char+3] === "'") {
-								//toggle switch statement in main loop to process as multiline
-								//use enums
+				//probably should break up each case into it's own function
+				switch(strType) {
+					case stringTypes.none:
+						if(contByLine[line][char] === '=') {
+							if(char === 0) {//probably don't need this with the regex underneath
+								throw new Error(`Invalid env file, line number ${line} shouldn't start with an equal sign.`);
+							}
+		
+							
+							if(!pattern.test(contByLine[line].slice(0, char))) {
+								throw new Error(`Invalid env file, the variable name in line number ${line} is invalid.`);
+							} else {
+								cleanContByLine[line] += contByLine[line].slice(0, char+1) + ' ';
+							}
+		
+							if(contByLine[line].length - char+1 >= 3) {
+	
+								if(contByLine[line][char+1] === '"' && contByLine[line][char+2] === '"' && contByLine[line][char+3] ===  '"') {
+									strType = stringTypes.multilineDouble;
+								} else if(contByLine[line][char+1] === "'" && contByLine[line][char+2] === "'" && contByLine[line][char+3] === "'") {
+									strType = stringTypes.multilineSingle;
+								}
+							} else if(contByLine[line].length - char+1 >= 1) {
+								
+								if(contByLine[line][char+1] === '"') {
+									strType = stringTypes.double;
+								} else if(contByLine[line][char+1] === "'") {
+									strType = stringTypes.single;
+								}
+							} else {
+								strType = stringTypes.notQuote;
+							}
 						}
-					}
+						break;
+
+					case stringTypes.multilineDouble:
+						break;
+					
+					case stringTypes.multilineSingle:
+						break;
+
+					case stringTypes.double:
+						//check if the previous character is '\' (for escaping the quote) (no need to check the previous character on the first iteration as it's guaranteed to be an equal sign)
+						if(contByLine[line][char] === '"' && contByLine[line][char-1] !== '\\') {
+							strType = stringTypes.endOfSecret;
+						} else if(char === contByLine[line].length-1) {
+							throw new Error(`Invalid env file, there is a missing double quote on line ${line}.`);
+						}
+						break;
+
+					case stringTypes.single:
+						//check if the previous character is '\' (for escaping the quote) (no need to check the previous character on the first iteration as it's guaranteed to be an equal sign)
+						if(contByLine[line][char] === "'" && contByLine[line][char] !== '\\') {
+							strType = stringTypes.endOfSecret;
+						} else if(char === contByLine[line].length-1) {
+							throw new Error(`Invalid env file, there is a missing double quote on line ${line}.`);
+						}
+						break;
+					
+					case stringTypes.notQuote:
+						if(contByLine[line][char] === ' ') {
+							strType = stringTypes.endOfSecret;
+						}
+						break;
+					
+					case stringTypes.endOfSecret:
+						//there should only be white space after the end of the secret (the code at the start of the for loop will catch the comment if it's there)					
+						if(contByLine[line][char] !== ' ') {
+							throw new Error(`Invalid env file, there should only be white space after the end of the secret on ${line}.`);
+						}
+						break;
 				}
 
-
+				
+			}
+			if(strType === stringTypes.endOfSecret) {
+				strType = stringTypes.none;
 			}
 		}
-		//look for the first equal sign
-		//check if the text before it matches this regex [a-zA-Z_]+[a-zA-Z0-9_]*
-		//check if there is a single double or multiline key(can use both double or single quotes for this) (and remove those separatley)
-		//repeat for the next line
 
-		//for each character check if it is a hash-tag (#), if it is then move on to the next line
-		
-		return "";
+		return cleanContByLine.reduce((acc, cur) => acc + '\n' + cur);
 	}
 }
 
