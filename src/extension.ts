@@ -71,13 +71,36 @@ export function activate(context: vscode.ExtensionContext) {
 	//note that the format of .env isn't 100% the same on all programming languages but this should probably work for most
 
 	//double check all the cases where skipChar() function is used that it is skipping by the correct amount
-	//possible bug: the comments inside multiline values are being put into the .env-example
+	//possible bug: the comments inside multiline values are being put into the .env-example (could reveal information about the values)
 		//remove the whitespace for multiline .env variables
-	//bug: it should be possible to have multiline strings with single and double quotes (not the ''' """, just ' and ")
-	
-	//BUG: FOR SOME REASON DOUJBLE IS NOT BEHAVING THE SAME AS MULTILINE
-	//after hitting the equal sign the code doesn't go into the other switch statement in the next loop
+	//bug (fixed, need to double check): it should be possible to have multiline strings with single and double quotes (not the ''' """, just ' and ")	
 	function removeValFromEnv(fileContents: string): string {
+		function skipChar(qty: number) { //doesn't check if it reached the end of the file, the for loop will take care of that
+			char += qty;
+
+			line += Math.floor(char / contByLine[line].length);
+			char %= contByLine[line].length;
+		}
+
+		function multilineCheck(quoteType: ("'" | '"')): void {
+			if(contByLine[line].length - char+1 >= 2 && contByLine[line][char-1] !== '\\' && contByLine[line][char] === quoteType && contByLine[line][char+1] === quoteType && contByLine[line][char+2] ===  quoteType) {
+				strType = stringTypes.endOfSecret;
+				skipChar(2);
+			} else if(line === contByLine.length-1 && char === contByLine[line].length-3) {//reached the end of the file
+				throw new Error(`Invalid env file, there is a missing endquote for a multiline quote.`);
+			}
+		}
+		function quoteCheck(quoteType: ("'" | '"')): void {
+			//checks if the previous character is '\' (for escaping the quote) (doesn't matter if we check the previous character on the first iteration as it's guaranteed to be the opening double quote)
+			if(contByLine[line][char] === quoteType && contByLine[line][char-1] !== '\\') {
+				strType = stringTypes.endOfSecret;
+				out.appendLine(`double ${line+1} ${char+1}`);
+			} else if(line === contByLine.length-1 && char === contByLine[line].length-1) {//reached the end of the file (and above isn't true)
+				throw new Error(`Invalid env file, there is a missing endquote.`);
+			}
+		}
+
+		//start
 		let contByLine: string[] = fileContents.split('\n');
 
 		let pattern = new RegExp("^[a-zA-Z_][a-zA-Z0-9_]*$");//double check this regex (also rename it)
@@ -94,9 +117,6 @@ export function activate(context: vscode.ExtensionContext) {
 				if(contByLine[line][char] === '#' && (strType !== stringTypes.multilineDouble && strType !== stringTypes.multilineSingle && strType !== stringTypes.double && strType !== stringTypes.single)) {
 					cleanContByLine[line] += contByLine[line].slice(char, contByLine[line].length);
 
-					// if(strType === stringTypes.single || strType === stringTypes.double) {
-					// 	throw new Error(`Invalid env file, the string on line number ${line + 1} does have a closing quote.`);
-					// }
 					break;
 				}
 				
@@ -116,10 +136,10 @@ export function activate(context: vscode.ExtensionContext) {
 	
 								if(contByLine[line][char+1] === '"' && contByLine[line][char+2] === '"' && contByLine[line][char+3] ===  '"') {
 									strType = stringTypes.multilineDouble;
-									skipChar(3); //this is fine (checked in debugger)
+									skipChar(3);
 								} else if(contByLine[line][char+1] === "'" && contByLine[line][char+2] === "'" && contByLine[line][char+3] === "'") {
 									strType = stringTypes.multilineSingle;
-									skipChar(3); //this is fine (checked in debugger)
+									skipChar(3);
 								}
 							} 
 							
@@ -127,52 +147,32 @@ export function activate(context: vscode.ExtensionContext) {
 								
 								if(contByLine[line][char+1] === '"') {
 									strType = stringTypes.double;
-									skipChar(1);//this is fine (checked in debugger)
+									skipChar(1);
 								} else if(contByLine[line][char+1] === "'") {
 									strType = stringTypes.single;
-									skipChar(1);//this is fine (checked in debugger)
+									skipChar(1);
 								}
 							} else {
 								strType = stringTypes.notQuote;
 							}
+
 						}
 						break;
 
 					case stringTypes.multilineDouble:
-						if(contByLine[line].length - char+1 >= 2 && contByLine[line][char-1] !== '\\' && contByLine[line][char] === '"' && contByLine[line][char+1] === '"' && contByLine[line][char+2] ===  '"') {
-							strType = stringTypes.endOfSecret;
-							skipChar(2);
-						} else if(line === contByLine.length-1 && char === contByLine[line].length-3) {//reached the end of the file
-							throw new Error(`Invalid env file, there is a missing endquote for a multiline quote.`);
-						}
+						multilineCheck('"');
 						break;
 					
 					case stringTypes.multilineSingle:
-						if(contByLine[line].length - char+1 >= 2 && contByLine[line][char-1] !== '\\' && contByLine[line][char] === "'" && contByLine[line][char+1] === "'" && contByLine[line][char+2] ===  "'") {
-							strType = stringTypes.endOfSecret;
-							skipChar(2);
-						} else if(line === contByLine.length-1 && char === contByLine[line].length-3) {//reached the end of the file
-							throw new Error(`Invalid env file, there is a missing endquote for a multiline quote.`);
-						}
+						multilineCheck("'");
 						break;
 
 					case stringTypes.double:
-						//checks if the previous character is '\' (for escaping the quote) (doesn't matter if we check the previous character on the first iteration as it's guaranteed to be the opening double quote)
-						if(contByLine[line][char] === '"' && contByLine[line][char-1] !== '\\') {
-							strType = stringTypes.endOfSecret;
-							out.appendLine(`double ${line+1} ${char+1}`);
-						} else if(line === contByLine.length-1 && char === contByLine[line].length-1) {//reached the end of the file (and above isn't true)
-							throw new Error(`Invalid env file, there is a missing endquote.`);
-						}
+						quoteCheck('"');
 						break;
 
 					case stringTypes.single:
-						//checks if the previous character is '\' (for escaping the quote) (doesn't matter if we check the previous character on the first iteration as it's guaranteed to be the opening double quote)
-						if(contByLine[line][char] === "'" && contByLine[line][char] !== '\\') {
-							strType = stringTypes.endOfSecret;
-						} else if(line === contByLine.length-1 && char === contByLine[line].length-1) {//reached the end of the file (and above isn't true)
-							throw new Error(`Invalid env file, there is a missing endquote.`);
-						}
+						quoteCheck("'");
 						break;
 					
 					case stringTypes.notQuote: //might be a bug here where there is no whitespace after a secret
@@ -195,14 +195,6 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		return cleanContByLine.reduce((acc, cur) => acc + '\n' + cur);
-
-
-		function skipChar(qty: number) { //doesn't check if it reached the end of the file, the for loop will take care of that
-			char += qty;
-
-			line += Math.floor(char / contByLine[line].length);
-			char %= contByLine[line].length;
-		}
 	}
 }
 
