@@ -70,10 +70,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//note that the format of .env isn't 100% the same on all programming languages but this should probably work for most
 
-	//double check all the cases where skipChar() function is used that it is skipping by the correct amount
-	//possible bug: the comments inside multiline values are being put into the .env-example (could reveal information about the values)
-		//remove the whitespace for multiline .env variables
-	//bug (fixed, need to double check): it should be possible to have multiline strings with single and double quotes (not the ''' """, just ' and ")	
+	//BUG: remove the whitespace for multiline .env variables
 	function removeValFromEnv(fileContents: string): string {
 		function skipChar(qty: number) { //doesn't check if it reached the end of the file, the for loop will take care of that
 			char += qty;
@@ -86,6 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
 			if(contByLine[line].length - char+1 >= 2 && contByLine[line][char-1] !== '\\' && contByLine[line][char] === quoteType && contByLine[line][char+1] === quoteType && contByLine[line][char+2] ===  quoteType) {
 				strType = stringTypes.endOfSecret;
 				skipChar(2);
+				
 			} else if(line === contByLine.length-1 && char === contByLine[line].length-3) {//reached the end of the file
 				throw new Error(`Invalid env file, there is a missing endquote for a multiline quote.`);
 			}
@@ -94,7 +92,7 @@ export function activate(context: vscode.ExtensionContext) {
 			//checks if the previous character is '\' (for escaping the quote) (doesn't matter if we check the previous character on the first iteration as it's guaranteed to be the opening double quote)
 			if(contByLine[line][char] === quoteType && contByLine[line][char-1] !== '\\') {
 				strType = stringTypes.endOfSecret;
-				out.appendLine(`double ${line+1} ${char+1}`);
+
 			} else if(line === contByLine.length-1 && char === contByLine[line].length-1) {//reached the end of the file (and above isn't true)
 				throw new Error(`Invalid env file, there is a missing endquote.`);
 			}
@@ -123,8 +121,8 @@ export function activate(context: vscode.ExtensionContext) {
 				//probably should break up each case into it's own function
 				switch(strType) {
 					case stringTypes.none:
-						if(contByLine[line][char] === '=') {						
-							//adds the variable name	
+						if(contByLine[line][char] === '=') {		
+							//adds the variable name
 							if(!pattern.test(contByLine[line].slice(0, char))) {
 								throw new Error(`Invalid env file, the variable name in line number ${line + 1} is invalid.`);
 							} else {
@@ -152,7 +150,9 @@ export function activate(context: vscode.ExtensionContext) {
 									strType = stringTypes.single;
 									skipChar(1);
 								}
-							} else {
+							} 
+							
+							if(strType === stringTypes.none){
 								strType = stringTypes.notQuote;
 							}
 
@@ -175,10 +175,12 @@ export function activate(context: vscode.ExtensionContext) {
 						quoteCheck("'");
 						break;
 					
-					case stringTypes.notQuote: //might be a bug here where there is no whitespace after a secret
-						if(contByLine[line][char] === ' ') {
+					case stringTypes.notQuote:
+						//the code at the start should catch a comment
+						if(contByLine[line][char] === ' ' || char >= contByLine[line].length-1) {
 							strType = stringTypes.endOfSecret;
-						}
+						} 
+						//NOTE: having an equal sign in the unquoted value is valid
 						break;
 					
 					case stringTypes.endOfSecret:
@@ -189,7 +191,7 @@ export function activate(context: vscode.ExtensionContext) {
 						break;
 				}				
 			}
-			if(strType === stringTypes.endOfSecret) {
+			if(strType === stringTypes.endOfSecret || strType === stringTypes.notQuote) {
 				strType = stringTypes.none;
 			}
 		}
