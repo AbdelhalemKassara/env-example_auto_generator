@@ -70,7 +70,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//note that the format of .env isn't 100% the same on all programming languages but this should probably work for most
 
-	//BUG: remove the whitespace for multiline .env variables
 	function removeValFromEnv(fileContents: string): string {
 		function skipChar(qty: number) { //doesn't check if it reached the end of the file, the for loop will take care of that
 			char += qty;
@@ -99,12 +98,12 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		//start
-		let contByLine: string[] = fileContents.split('\n');
+		const contByLine: string[] = fileContents.split('\n');
 
-		let pattern = new RegExp("^[a-zA-Z_][a-zA-Z0-9_]*$");//double check this regex (also rename it)
+		const pattern = new RegExp("^[a-zA-Z_][a-zA-Z0-9_]*$");//double check this regex (also rename it)
 		let strType: stringTypes = stringTypes.none;
 
-		let cleanContByLine: string[] = new Array(contByLine.length).fill("");
+		let cleanContByLine: string = "";
 
 		let line = 0;
 		let char = 0;
@@ -113,8 +112,7 @@ export function activate(context: vscode.ExtensionContext) {
 			char = 0;
 			for(; char < contByLine[line].length; char++) {
 				if(contByLine[line][char] === '#' && (strType !== stringTypes.multilineDouble && strType !== stringTypes.multilineSingle && strType !== stringTypes.double && strType !== stringTypes.single)) {
-					cleanContByLine[line] += contByLine[line].slice(char, contByLine[line].length);
-
+					cleanContByLine += contByLine[line].slice(char, contByLine[line].length); 
 					break;
 				}
 				
@@ -126,7 +124,7 @@ export function activate(context: vscode.ExtensionContext) {
 							if(!pattern.test(contByLine[line].slice(0, char))) {
 								throw new Error(`Invalid env file, the variable name in line number ${line + 1} is invalid.`);
 							} else {
-								cleanContByLine[line] += contByLine[line].slice(0, char+1) + ' ';
+								cleanContByLine += contByLine[line].slice(0, char+1) + ' ';
 							}
 							
 							//determines the type of value
@@ -194,12 +192,16 @@ export function activate(context: vscode.ExtensionContext) {
 			if(strType === stringTypes.endOfSecret || strType === stringTypes.notQuote) {
 				strType = stringTypes.none;
 			}
+
+			// create a new line if strType !== (multilineDouble, multilineSingle, double, single) and this isn't the last line
+			if(strType !== stringTypes.multilineDouble && strType !== stringTypes.multilineSingle && strType !== stringTypes.single && strType !== stringTypes.double && line < contByLine.length-1) {
+				cleanContByLine += '\n';
+			}
 		}
 
-		return cleanContByLine.reduce((acc, cur) => acc + '\n' + cur);
+		return cleanContByLine;
 	}
 }
-
 
 
 // This method is called when your extension is deactivated
