@@ -1,13 +1,37 @@
 {
   "name": "env-example-auto-generator",
-  "displayName": "env-example_auto_generator",
-  "description": "auto prompts the user to create an .env-example when an .env file is detected   and keeps it in sync",
+  "displayName": "env-example auto generator",
+  "description": "auto prompts the user to create an .env-example when an .env file is detected and keeps it in sync",
   "version": "0.0.1",
+  "homepage": "https://github.com/AbdelhalemKassara/env-example_auto_generator",
+  "icon" : "./icon/icon.png",
+  "preview" : true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AbdelhalemKassara/env-example_auto_generator"
+  },
+  "galleryBanner": {
+    "color": "#C80000",
+    "theme": "dark"
+  },
+  "license" : "GPL-2.0-only",
+  "pricing" : "Free",
+  "author": {
+    "name": "Abdelhalem Kassara"
+  },
+  "bugs" : {
+    "url": "https://github.com/AbdelhalemKassara/env-example_auto_generator/issues"
+  },
   "engines": {
     "vscode": "^1.95.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Extension Packs",
+    "SCM Providers",
+    "Visualization",
+    "Testing",
+    "Formatters"
   ],
   "activationEvents": [
     "onStartupFinished"
@@ -15,20 +39,6 @@
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
-      {
-        "command": "env-example-auto-generator.helloWorld",
-        "title": "test Command",
-        "_random_string_I_made_up_to_write_comments": " the command string above can be anything you want. (I assume you can't override existing commands)"
-      },
-      {
-        "command": "env-example-auto-generator.curtime",
-        "title": "Current Time"
-      },
-      {
-        "command": "env-example-auto-generator.envFileOpen",
-        "title": "Env File Open",
-        "when": "editorLangId == 'typescript'"
-      }
     ]
   },
   "scripts": {
