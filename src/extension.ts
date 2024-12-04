@@ -9,15 +9,11 @@ import { removeValFromEnv } from './envFileProcessingFun';
 export function activate(context: vscode.ExtensionContext) {
 	let out = vscode.window.createOutputChannel("hello world");//can call vscode api in the activate command and will run when vscode starts
 	
-	let modifyEnvPerm: Map<string, boolean> = new Map();
+	let canModifyEnvPerm: Map<string, boolean> = new Map();
 	
 
 	//runs whenever the user saves a file (also runs when the file is autosaved)
 	const disposable4 = vscode.workspace.onDidSaveTextDocument(async (e) => {
-
-		// out.appendLine(e.fileName)s;//gets the file path and name
-		// out.appendLine(e.getText());//gets the content of the file
-
 		//checks the fileType and makes sure its .env
 		let fileType: any = e.fileName.split("/").at(-1);
 		fileType = fileType.split(".").at(-1);
@@ -26,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		//check if the user already accepted or rejected that they want this .env file to have a .env-example file auto generated
-		let decision: any = modifyEnvPerm.get(e.fileName);
+		let decision: any = canModifyEnvPerm.get(e.fileName);
 		if(decision === undefined) {
 			//ask the user
 			let answer: any = await vscode.window.showInformationMessage("Should a .env-example file be created or updated?", "yes", "no");
@@ -35,10 +31,10 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 			else if (answer === "no") {
-				modifyEnvPerm.set(e.fileName, false);
+				canModifyEnvPerm.set(e.fileName, false);
 				return;
 			} else if(answer === "yes") {//there shouldn't be another option return but just in case we'll just check if the last possible option is "yes"
-				modifyEnvPerm.set(e.fileName, true);
+				canModifyEnvPerm.set(e.fileName, true);
 			} 
 		} else if(decision === false) {
 			return;
@@ -50,8 +46,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 		// out.appendLine(fileContents.split('\n').length.toString());
 		try {
-			let path: vscode.Uri = URI.parse("file://" + e.fileName + "-example");
-			await vscode.workspace.fs.writeFile(path, new TextEncoder().encode(removeValFromEnv(fileContents)));//this writes regardless if there is a file there or not
+			await vscode.workspace.fs.writeFile(URI.parse("file://" + e.fileName + "-example"), 
+				new TextEncoder().encode(removeValFromEnv(fileContents)));//this writes regardless if there is a file there or not
 		} catch(e: any) {
 			out.appendLine(e.toString());
 		}
