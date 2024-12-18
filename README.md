@@ -1,71 +1,42 @@
-# env-example-auto-generator README
-
-This is the README for your extension "env-example-auto-generator". After writing up a brief description, we recommend including the following sections.
+# env-example Auto Generator
+Keeps your `.env-example` file automatically synced with your `.env` file, removing sensitive data and ensuring a clean, up-to-date example for your project.
 
 ## Features
+* Automatically generates and keeps your `.env-example` file in sync with your project’s `.env` file. 
+* It removes sensitive data from the `.env` file, ensuring no confidential information is exposed. 
+* The extension stays unobtrusive, adding no additional placeholder data to the `.env-example`. 
+* It updates the `.env-example` file every time the user saves the `.env` file and supports all `*.env` files.  
+* It removes any unnecessary extra lines from multiline values, keeping the example clean and precise.
+<br/><br/>
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+<div style="text-align: center;  margin: 0 auto;">
+  <img src="demo videos/demo clicking x and no/demo clicking x and no.gif" width="600" />
+</div>
 
-For example if there is an image subfolder under your extension project workspace:
+> Simple prompt that operats on the current `.env` file. Users can choose to create or update the `.env-example` file, decline and suppress future prompts, or decline while being reminded on the next save.
 
-\!\[feature X\]\(images/feature-x.png\)
+<div style="text-align: center;  margin: 0 auto;">
+  <img src="demo videos/values and comments/values and comments.gif" width="600" />
+</div>
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+> Works with a wide range of value types.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+None at this moment.
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## Incoming Features
+* Ability to add custom file types for other env file types (ex. .env.production)
+* Ability to add custom file ending for the env-example (ex. -example, .example)
+* Button at the top of the text editor to trigger the update/create .env-example popup prompt.
 
 ## Known Issues
+* Currently, the only way to generate a `.env-example` file for a specific `.env` file after selecting 'No' in the popup is to restart VS Code.
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
+preview.
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**

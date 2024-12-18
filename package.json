@@ -1,6 +1,6 @@
 {
   "name": "env-example-auto-generator",
-  "displayName": "env-example auto generator",
+  "displayName": "env-example Auto Generator",
   "description": "auto prompts the user to create an .env-example when an .env file is detected and keeps it in sync",
   "version": "0.0.1",
   "homepage": "https://github.com/AbdelhalemKassara/env-example_auto_generator",
@@ -32,6 +32,13 @@
     "Visualization",
     "Testing",
     "Formatters"
+  ],
+  "keywords": [
+    ".env-example",
+    "env example",
+    "auto env",
+    "env",
+    "example env"
   ],
   "activationEvents": [
     "onStartupFinished"
