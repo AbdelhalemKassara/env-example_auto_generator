@@ -10,15 +10,14 @@ Keeps your `.env-example` file automatically synced with your `.env` file, remov
 <br/><br/>
 
 <div style="text-align: center;  margin: 0 auto;">
-  <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/demo%20clicking%20x%20and%20no/demo%20clicking%20x%20and%20no.gif?raw=true" width="600" />
+  <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/demo%20clicking%20x%20and%20no/demo%20clicking%20x%20and%20no.gif?raw=true" width="700" />
 </div>
 
 > Simple prompt that operats on the current `.env` file. Users can choose to create or update the `.env-example` file, decline and suppress future prompts, or decline while being reminded on the next save.
 
 <div style="text-align: center;  margin: 0 auto;">
-  <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/values%20and%20comments/values%20and%20comments.gif?raw=true" width="600" />
+  <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/values%20and%20comments/values%20and%20comments.gif?raw=true" width="700" />
 </div>
-
 > Works with a wide range of value types.
 
 ## Extension Settings
@@ -32,8 +31,6 @@ None at this moment.
 
 ## Known Issues
 * Currently, the only way to generate a `.env-example` file for a specific `.env` file after selecting 'No' in the popup is to restart VS Code.
-* gifs look bad.
-
 
 ## Release Notes
 
