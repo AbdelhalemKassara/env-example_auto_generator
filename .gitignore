@@ -1,7 +1,13 @@
 #stuff I added
-#temp, as the .gif files are too large at the moment
-demo videos
+
+#ignore the source video and video editor file
+demo videos/**/*.mlt
+demo videos/**/*.mkv
+demo videos/**/*.mp4
+
+#ignore the packaged vscode extension
 *.vsix
+
 ## end of stuff I added
 
 
