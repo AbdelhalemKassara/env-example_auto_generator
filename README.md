@@ -3,10 +3,11 @@ Keeps your `.env-example` file automatically synced with your `.env` file, remov
 
 ## Features
 * Automatically generates and keeps your `.env-example` file in sync with your project’s `.env` file. 
-* It removes sensitive data from the `.env` file, ensuring no confidential information is exposed. 
-* The extension stays unobtrusive, adding no additional placeholder data to the `.env-example`. 
-* It updates the `.env-example` file every time the user saves the `.env` file and supports all `*.env` files.  
-* It removes any unnecessary extra lines from multiline values, keeping the example clean and precise.
+* Removes sensitive data from the `.env` file, ensuring no confidential information is exposed. 
+* Unobtrusive, adding no additional placeholder data to the `.env-example`. 
+* Updates the `.env-example` file every time the user saves the `.env` file and supports all `*.env` files.  
+* Removes any unnecessary extra lines from multiline values, keeping the example clean and precise.
+
 <br/><br/>
 <div style="text-align: center;  margin: 0 auto;">
   <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/values%20and%20comments/values%20and%20comments.gif?raw=true" width="700" />
