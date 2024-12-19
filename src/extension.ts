@@ -1,19 +1,13 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { URI } from 'vscode-uri';
 import { removeValFromEnv } from './envFileProcessingFun';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-	let out = vscode.window.createOutputChannel("hello world");//can call vscode api in the activate command and will run when vscode starts
-	
+export function activate(context: vscode.ExtensionContext) {	
 	let canModifyEnvPerm: Map<string, boolean> = new Map();
 	
 
 	//runs whenever the user saves a file (also runs when the file is autosaved)
-	const disposable4 = vscode.workspace.onDidSaveTextDocument(async (e) => {
+	const disposable = vscode.workspace.onDidSaveTextDocument(async (e) => {
 		//checks the fileType and makes sure its .env
 		let fileType: any = e.fileName.split("/").at(-1);
 		fileType = fileType.split(".").at(-1);
@@ -44,35 +38,17 @@ export function activate(context: vscode.ExtensionContext) {
 		let fileContents: string = e.getText();
 
 
-		// out.appendLine(fileContents.split('\n').length.toString());
 		try {
 			await vscode.workspace.fs.writeFile(URI.parse("file://" + e.fileName + "-example"), 
 				new TextEncoder().encode(removeValFromEnv(fileContents)));//this writes regardless if there is a file there or not
 		} catch(e: any) {
-			out.appendLine(e.toString());
+			//e.toString();
 		}
 	});
 
-	context.subscriptions.push(disposable4);
+	context.subscriptions.push(disposable);
 }
 
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
-
-
-///////////////////////////////
-// MOVE ALL OF THIS TO THE .env-example project repository
-// 
-///////////////////////////////
-	//things to figure out:
-	//[x]create and edit a file 
-		//[ kinda ]check if a file already exists
-		//
-	//[x]read the contents of a file that isn't open (the .env-example if there is one that already exists) (probably a function in the workspaces api)
-	//[x]create a button prompts (just yes no questions)
-	//[ ]a way to prompt the user to create a .env-example whenver they open a .env
-
-	//things to store temporarily:
-		//which .env and .env-example files I can create a .env-example and/or edit the .env-example
-		// ... can't ... 
