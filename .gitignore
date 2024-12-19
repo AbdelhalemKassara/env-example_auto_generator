@@ -8,6 +8,7 @@ demo videos/**/*.mp4
 #ignore the packaged vscode extension
 *.vsix
 
+.env
 ## end of stuff I added
 
 
