@@ -3,7 +3,7 @@
   "displayName": "env-example Auto Generator",
   "description": "auto prompts the user to create an .env-example when an .env file is detected and keeps it in sync",
   "publisher" : "AbdelhalemKassara",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/AbdelhalemKassara/env-example_auto_generator",
   "icon" : "./icon/icon.png",
   "preview" : true,
@@ -57,9 +57,11 @@
     "lint": "eslint src",
     "testOriginal": "vscode-test",
     "test": "jest /out --watchAll --verbose",
+    "package" : "vsce package",
     "publishMin": "vsc login AbdelhalemKassara && vsc publish minor",
     "publishMaj": "vsc login AbdelhalemKassara && vsc publish major",
-    "publishPat": "vsc login AbdelhalemKassara && vsc publish patch"
+    "publishPat": "vsc login AbdelhalemKassara && vsc publish patch",
+    "publish" : "vsc login AbdelhalemKassara && vsc publish"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
