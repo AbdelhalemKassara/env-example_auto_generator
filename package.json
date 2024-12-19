@@ -58,10 +58,10 @@
     "testOriginal": "vscode-test",
     "test": "jest /out --watchAll --verbose",
     "package" : "vsce package",
-    "publishMin": "vsc login AbdelhalemKassara && vsc publish minor",
-    "publishMaj": "vsc login AbdelhalemKassara && vsc publish major",
-    "publishPat": "vsc login AbdelhalemKassara && vsc publish patch",
-    "publish" : "vsc login AbdelhalemKassara && vsc publish"
+    "publishMin": "vsce login AbdelhalemKassara && vsce publish minor",
+    "publishMaj": "vsce login AbdelhalemKassara && vsce publish major",
+    "publishPat": "vsce login AbdelhalemKassara && vsce publish patch",
+    "publish" : "vsce login AbdelhalemKassara && vsce publish"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
