@@ -131,7 +131,7 @@ export function removeValFromEnv(fileContents: string): string {
       strType = stringTypes.none;
     }
 
-    // create a new line if strType !== (multilineDouble, multilineSingle, double, single) and this isn't the last line
+    // create a new line if strType !== (multilineDouble, multilineSingle, double, and single) and this isn't the last line
     if(strType !== stringTypes.multilineDouble && strType !== stringTypes.multilineSingle && strType !== stringTypes.single && strType !== stringTypes.double && line < contByLine.length-1) {
       cleanContByLine += '\n';
     }

@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
 			await vscode.workspace.fs.writeFile(URI.parse("file://" + e.fileName + "-example"), 
 				new TextEncoder().encode(removeValFromEnv(fileContents)));//this writes regardless if there is a file there or not
 		} catch(e: any) {
-			//e.toString();
+			vscode.window.showErrorMessage(e.toString());
 		}
 	});
 

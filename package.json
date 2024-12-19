@@ -3,7 +3,7 @@
   "displayName": "env-example Auto Generator",
   "description": "auto prompts the user to create an .env-example when an .env file is detected and keeps it in sync",
   "publisher" : "AbdelhalemKassara",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/AbdelhalemKassara/env-example_auto_generator",
   "icon" : "./icon/icon.png",
   "preview" : true,
