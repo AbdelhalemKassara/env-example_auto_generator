@@ -56,7 +56,25 @@
         }
       }
     },
-    "commands": []
+    "commands": [
+      {
+        "command": "env-example-auto-generator.test",
+        "title": "test",
+        "icon" : {
+          "light": "icon/env-ex-light.svg",
+          "dark" : "icon/env-ex-dark.svg"
+        }
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command" : "env-example-auto-generator.test",
+          "group": "navigation",
+          "when" : "resourceExtname == .env || resourceFilename == '.env'"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
