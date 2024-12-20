@@ -4,7 +4,6 @@ import { removeValFromEnv } from './envFileProcessingFun';
 
 export function activate(context: vscode.ExtensionContext) {	
 	let canModifyEnvPerm: Map<string, boolean> = new Map();
-	
 
 	//runs whenever the user saves a file (also runs when the file is autosaved)
 	const disposable = vscode.workspace.onDidSaveTextDocument(async (e) => {
@@ -42,7 +41,12 @@ export function activate(context: vscode.ExtensionContext) {
 			await vscode.workspace.fs.writeFile(URI.parse("file://" + e.fileName + "-example"), 
 				new TextEncoder().encode(removeValFromEnv(fileContents)));//this writes regardless if there is a file there or not
 		} catch(e: any) {
-			vscode.window.showErrorMessage(e.toString());
+				let errorNotifToggle: boolean | null | undefined = vscode.workspace.getConfiguration("env-example-auto-generator")?.get("Error-Notifications");
+
+				//we want this to evaluate to true if it's true, undefined, or null
+				if(errorNotifToggle !== false) { 
+					vscode.window.showErrorMessage(e.toString());
+				}
 		}
 	});
 
