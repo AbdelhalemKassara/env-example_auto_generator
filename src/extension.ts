@@ -7,9 +7,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//runs whenever the user saves a file (also runs when the file is autosaved)
 	const disposable = vscode.workspace.onDidSaveTextDocument(async (e) => {
-		//checks the fileType and makes sure its .env
-		let fileType: any = e.fileName.split("/").at(-1);
-		fileType = fileType.split(".").at(-1);
+		//checks the fileType and makes sure its .env (checks the type after the first instance of a dot)
+		let fileType: any = (e.fileName.split("/")?.at(-1))?.split(".")?.at(1);
+
 		if(fileType === undefined || fileType !== "env") {
 			return;
 		}
