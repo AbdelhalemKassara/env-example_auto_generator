@@ -71,7 +71,7 @@
         {
           "command" : "env-example-auto-generator.test",
           "group": "navigation",
-          "when" : "resourceExtname == .env || resourceFilename == '.env'"
+          "when" : "resourceFilename =~ /\\.env($|[\\.])/"
         }
       ]
     }
