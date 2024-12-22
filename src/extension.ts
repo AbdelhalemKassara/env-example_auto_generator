@@ -6,17 +6,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let canModifyEnvPerm: Map<string, boolean> = new Map();
 
 	//runs whenever the user saves a file (also runs when the file is autosaved)
-	const disposable = vscode.workspace.onDidSaveTextDocument(updateEnvExample);
-
-	const disposable1 = vscode.commands.registerTextEditorCommand("env-example-auto-generator.generateEnvExample", (textEdit: vscode.TextEditor) => {
-		canModifyEnvPerm.set(textEdit.document.fileName, true); //in case the user changes their mind
-		updateEnvExample(textEdit.document);
-	});
-
-	context.subscriptions.push(disposable);
-	context.subscriptions.push(disposable1);
-
-	async function updateEnvExample(textDoc: vscode.TextDocument) {
+	const disposable = vscode.workspace.onDidSaveTextDocument(async (textDoc : vscode.TextDocument) => {
 		//checks the fileType and makes sure its .env (checks the type after the first instance of a dot)
 		let fileType: string | undefined = (textDoc.fileName.split("/")?.at(-1))?.split(".")?.at(1);
 
@@ -58,7 +48,24 @@ export function activate(context: vscode.ExtensionContext) {
 				vscode.window.showErrorMessage(error.toString());
 			}
 		}
-	}
+		
+	});
+
+	const disposable1 = vscode.commands.registerTextEditorCommand("env-example-auto-generator.generateEnvExample", (textEdit: vscode.TextEditor) => {
+		if(canModifyEnvPerm.get(textEdit.document.fileName) === false) {
+			canModifyEnvPerm.delete(textEdit.document.fileName); //in case the user changes their mind
+		}
+
+		textEdit.document.save(); //read docs to double check if this is fine
+	});
+
+	const disposable2 = vscode.commands.registerTextEditorCommand("env-example-auto-generator.stopGeneratingEnvExample", (textEdit: vscode.TextEditor) => {
+		canModifyEnvPerm.set(textEdit.document.fileName, false);
+	});
+
+	context.subscriptions.push(disposable);
+	context.subscriptions.push(disposable1);
+	context.subscriptions.push(disposable2);
 }
 
 

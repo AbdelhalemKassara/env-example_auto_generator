@@ -64,12 +64,25 @@
           "light": "icon/env-ex-light.svg",
           "dark" : "icon/env-ex-dark.svg"
         }
+      },
+      {
+        "command": "env-example-auto-generator.stopGeneratingEnvExample",
+        "title": "Generate .env-example",
+        "icon" : {
+          "light": "icon/env-ex-cross-light.svg",
+          "dark" : "icon/env-ex-cross-dark.svg"
+        }
       }
     ],
     "menus": {
       "editor/title": [
         {
           "command" : "env-example-auto-generator.generateEnvExample",
+          "group": "navigation",
+          "when" : "resourceFilename =~ /\\.env($|[\\.])/"
+        },
+        {
+          "command" : "env-example-auto-generator.stopGeneratingEnvExample",
           "group": "navigation",
           "when" : "resourceFilename =~ /\\.env($|[\\.])/"
         }
