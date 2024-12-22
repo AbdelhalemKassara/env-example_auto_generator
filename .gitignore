@@ -1,11 +1,11 @@
 #stuff I added
 
-#ignore the source video and video editor file
+#source video and video editor file
 demo videos/**/*.mlt
 demo videos/**/*.mkv
 demo videos/**/*.mp4
 
-#ignore the packaged vscode extension
+#packaged vscode extension
 *.vsix
 
 .env
