@@ -58,8 +58,8 @@
     },
     "commands": [
       {
-        "command": "env-example-auto-generator.test",
-        "title": "test",
+        "command": "env-example-auto-generator.generateEnvExample",
+        "title": "Generate .env-example",
         "icon" : {
           "light": "icon/env-ex-light.svg",
           "dark" : "icon/env-ex-dark.svg"
@@ -69,7 +69,7 @@
     "menus": {
       "editor/title": [
         {
-          "command" : "env-example-auto-generator.test",
+          "command" : "env-example-auto-generator.generateEnvExample",
           "group": "navigation",
           "when" : "resourceFilename =~ /\\.env($|[\\.])/"
         }
