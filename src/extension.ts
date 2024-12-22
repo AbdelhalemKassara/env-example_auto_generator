@@ -22,8 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 			if(answer === undefined){
 				return;
-			}
-			else if (answer === "no") {
+			} else if (answer === "no") {
 				canModifyEnvPerm.set(textDoc.fileName, false);
 				return;
 			} else if(answer === "yes") {//there shouldn't be another option return but just in case we'll just check if the last possible option is "yes"
@@ -34,12 +33,9 @@ export function activate(context: vscode.ExtensionContext) {
 		} 
 		
 		//this code updates or creates the .env-example file
-		let fileContents: string = textDoc.getText();
-
-
 		try {
 			await vscode.workspace.fs.writeFile(URI.parse("file://" + textDoc.fileName + "-example"), 
-				new TextEncoder().encode(removeValFromEnv(fileContents)));//this writes regardless if there is a file there or not
+																					new TextEncoder().encode(removeValFromEnv(textDoc.getText())));//this writes regardless if there is a file there or not
 		} catch(error: any) {
 			let errorNotifToggle: boolean | null | undefined = vscode.workspace.getConfiguration("env-example-auto-generator")?.get("Error-Notifications");
 
