@@ -198,7 +198,12 @@ test=
     expect(removeValFromEnv('key=\'\'\'som\\"ething\'\'\'')).toEqual('key= ');
     expect(removeValFromEnv('key=\'\'\'\\"som\\"ething\'\'\'')).toEqual('key= ');
     
-    //add some extra multiline tests
+    expect(removeValFromEnv("key='''\\'\n'''")).toEqual("key= ");
+    expect(removeValFromEnv("key='''som\\'e\nthing\\''''")).toEqual("key= ");
+    expect(removeValFromEnv("key='''somet\nhing\\''''")).toEqual("key= ");
+    expect(removeValFromEnv("key='''som\\'eth\ning'''")).toEqual("key= ");
+    expect(removeValFromEnv("key='''\\'som\n\\'\nething'''")).toEqual("key= ");
+
   });
   it('can handle escape characters, double multiline quoted value', () => {
     expect(removeValFromEnv("key=\"\"\"\\'\"\"\"")).toEqual("key= ");
@@ -213,6 +218,10 @@ test=
     expect(removeValFromEnv('key="""som\\"ething"""')).toEqual('key= ');
     expect(removeValFromEnv('key="""\\"som\\"ething"""')).toEqual('key= ');
 
-    //add some extra multiline tests
+    expect(removeValFromEnv('key=\"\"\"\n\\"\n\"\"\"')).toEqual('key= ');
+    expect(removeValFromEnv('key="""som\\"ethi\nng\\""""')).toEqual('key= ');
+    expect(removeValFromEnv('key="""som\nething\\""""')).toEqual('key= ');
+    expect(removeValFromEnv('key="""som\n\\"ething"""')).toEqual('key= ');
+    expect(removeValFromEnv('key="""\\"som\\"\nething"""')).toEqual('key= ');
   });
 });
