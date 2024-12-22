@@ -141,4 +141,78 @@ test=
 `);
 
   });
+
+  
+  it('can handle escape characters, unquoted value', () => {
+    expect(removeValFromEnv("key=\\'")).toEqual("key= ");
+    expect(removeValFromEnv("key=som\\'ething\\'")).toEqual("key= ");
+    expect(removeValFromEnv("key=something\\'")).toEqual("key= ");
+    expect(removeValFromEnv("key=som\\'ething")).toEqual("key= ");
+    expect(removeValFromEnv("key=\\'som\\'ething")).toEqual("key= ");
+
+    expect(removeValFromEnv('key=\\"')).toEqual('key= ');
+    expect(removeValFromEnv('key=som\\"ething\\"')).toEqual('key= ');
+    expect(removeValFromEnv('key=something\\"')).toEqual('key= ');
+    expect(removeValFromEnv('key=som\\"ething')).toEqual('key= ');
+    expect(removeValFromEnv('key=\\"som\\"ething')).toEqual('key= ');
+  });
+
+  it('can handle escape characters, single quoted value', () => {
+    expect(removeValFromEnv("key='\\''")).toEqual("key= ");
+    expect(removeValFromEnv("key='som\\'ething\\''")).toEqual("key= ");
+    expect(removeValFromEnv("key='something\\''")).toEqual("key= ");
+    expect(removeValFromEnv("key='som\\'ething'")).toEqual("key= ");
+    expect(removeValFromEnv("key='\\'som\\'ething'")).toEqual("key= ");
+
+    expect(removeValFromEnv('key=\'\\"\'')).toEqual('key= ');
+    expect(removeValFromEnv('key=\'som\\"ething\\"\'')).toEqual('key= ');
+    expect(removeValFromEnv('key=\'something\\"\'')).toEqual('key= ');
+    expect(removeValFromEnv('key=\'som\\"ething\'')).toEqual('key= ');
+    expect(removeValFromEnv('key=\'\\"som\\"ething\'')).toEqual('key= ');
+  });
+  
+  it('can handle escape characters, double quoted value', () => {
+    expect(removeValFromEnv("key=\"\\'\"")).toEqual("key= ");
+    expect(removeValFromEnv("key=\"som\\'ething\\'\"")).toEqual("key= ");
+    expect(removeValFromEnv("key=\"something\\'\"")).toEqual("key= ");
+    expect(removeValFromEnv("key=\"som\\'ething\"")).toEqual("key= ");
+    expect(removeValFromEnv("key=\"\\'som\\'ething\"")).toEqual("key= ");
+
+    expect(removeValFromEnv('key="\\""')).toEqual('key= ');
+    expect(removeValFromEnv('key="som\\"ething\\""')).toEqual('key= ');
+    expect(removeValFromEnv('key="something\\""')).toEqual('key= ');
+    expect(removeValFromEnv('key="som\\"ething"')).toEqual('key= ');
+    expect(removeValFromEnv('key="\\"som\\"ething"')).toEqual('key= ');
+  });
+
+  it('can handle escape characters, single multiline quoted value', () => {
+    expect(removeValFromEnv("key='''\\''''")).toEqual("key= ");
+    expect(removeValFromEnv("key='''som\\'ething\\''''")).toEqual("key= ");
+    expect(removeValFromEnv("key='''something\\''''")).toEqual("key= ");
+    expect(removeValFromEnv("key='''som\\'ething'''")).toEqual("key= ");
+    expect(removeValFromEnv("key='''\\'som\\'ething'''")).toEqual("key= ");
+
+    expect(removeValFromEnv('key=\'\'\'\\"\'\'\'')).toEqual('key= ');
+    expect(removeValFromEnv('key=\'\'\'som\\"ething\\"\'\'\'')).toEqual('key= ');
+    expect(removeValFromEnv('key=\'\'\'something\\"\'\'\'')).toEqual('key= ');
+    expect(removeValFromEnv('key=\'\'\'som\\"ething\'\'\'')).toEqual('key= ');
+    expect(removeValFromEnv('key=\'\'\'\\"som\\"ething\'\'\'')).toEqual('key= ');
+    
+    //add some extra multiline tests
+  });
+  it('can handle escape characters, double multiline quoted value', () => {
+    expect(removeValFromEnv("key=\"\"\"\\'\"\"\"")).toEqual("key= ");
+    expect(removeValFromEnv("key=\"\"\"som\\'ething\\'\"\"\"")).toEqual("key= ");
+    expect(removeValFromEnv("key=\"\"\"something\\'\"\"\"")).toEqual("key= ");
+    expect(removeValFromEnv("key=\"\"\"som\\'ething\"\"\"")).toEqual("key= ");
+    expect(removeValFromEnv("key=\"\"\"\\'som\\'ething\"\"\"")).toEqual("key= ");
+
+    expect(removeValFromEnv('key=\"\"\"\\"\"\"\"')).toEqual('key= ');
+    expect(removeValFromEnv('key="""som\\"ething\\""""')).toEqual('key= ');
+    expect(removeValFromEnv('key="""something\\""""')).toEqual('key= ');
+    expect(removeValFromEnv('key="""som\\"ething"""')).toEqual('key= ');
+    expect(removeValFromEnv('key="""\\"som\\"ething"""')).toEqual('key= ');
+
+    //add some extra multiline tests
+  });
 });
