@@ -2,11 +2,14 @@
 Keeps your `.env-example` file automatically synced with your `.env` file, removing sensitive data and ensuring a clean, up-to-date example for your project.
 
 ## Features
-* Automatically generates and keeps your `.env-example` file in sync with your project’s `.env` file. 
-* Removes sensitive data from the `.env` file, ensuring no confidential information is exposed. 
+* Asks the user if it should keep a `.env-example` file in sync with the currently opened `.env` file at the first save.
 * Unobtrusive, adding no additional placeholder data to the `.env-example`. 
 * Updates the `.env-example` file every time the user saves the `.env` file and supports all `*.env` files.  
-* Removes any unnecessary extra lines from multiline values, keeping the example clean and precise.
+* Removes any unnecessary extra lines from multi-line values, keeping the example clean and precise.
+
+* Toggle buttons on the editor toolbar to control whether or not to keep the `.env-example` file in sync.
+* Displays error messages for invalid `.env` to let the user know why the `.env-example` file wasn't updated.
+* Works with a `single`, `double`, `single multi-line`, and `double multi-line` quotes.
 
 <br/><br/>
 <div style="text-align: center;  margin: 0 auto;">
@@ -23,20 +26,9 @@ Keeps your `.env-example` file automatically synced with your `.env` file, remov
 > Simple prompt that operats on the current `.env` file. Users can choose to create or update the `.env-example` file, decline and suppress future prompts, or decline while being reminded on the next save.
 
 ## Extension Settings
-
-None at this moment.
+* `env-example-auto-generator.Error-Notifications` Toggles whether or not to display error notifications for invalidly formatted .env files.
 
 ## Incoming Features
-* Ability to add custom file types for other env file types (ex. .env.production)
-* Ability to add custom file ending for the env-example (ex. -example, .example)
-* Button at the top of the text editor to trigger the update/create .env-example popup prompt.
+None right now but let me know on https://github.com/AbdelhalemKassara/env-example_auto_generator/issues if there are any features I should add.
 
 ## Known Issues
-* Currently, the only way to generate a `.env-example` file for a specific `.env` file after selecting 'No' in the popup is to restart VS Code.
-
-## Release Notes
-
-### 0.0.1
-
-preview.
-
