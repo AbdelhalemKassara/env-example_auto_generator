@@ -52,7 +52,7 @@
         "env-example-auto-generator.Error-Notifications": {
           "type" : "boolean",
           "default" : true,
-          "description": "Specfies wether or not to display error notifications for invalidly formatted .env files."
+          "description": "Toggles whether or not to display error notifications for invalidly formatted .env files."
         }
       }
     },
