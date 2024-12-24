@@ -52,7 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
 			canModifyEnvPerm.delete(textEdit.document.fileName); //in case the user changes their mind
 		}
 
-		textEdit.document.save(); //read docs to double check if this is fine
+		textEdit.document.save();
 	});
 
 	const disposable2 = vscode.commands.registerTextEditorCommand("env-example-auto-generator.stopGeneratingEnvExample", (textEdit: vscode.TextEditor) => {

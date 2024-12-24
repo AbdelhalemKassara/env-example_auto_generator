@@ -38,7 +38,7 @@ export function removeValFromEnv(fileContents: string): string {
   //start
   const contByLine: string[] = fileContents.split('\n');
 
-  const pattern = new RegExp("^[a-zA-Z_][a-zA-Z0-9_]*$");//double check this regex (also rename it)
+  const pattern = new RegExp("^[a-zA-Z_][a-zA-Z0-9_]*$");
   let strType: stringTypes = stringTypes.none;
 
   let cleanContByLine: string = "";
