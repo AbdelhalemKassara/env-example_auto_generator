@@ -1,4 +1,5 @@
 #stuff I added
+.DS_Store
 
 #source video and video editor file
 demo videos/**/*.mlt
