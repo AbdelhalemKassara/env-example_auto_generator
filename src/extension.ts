@@ -8,11 +8,18 @@ export function activate(context: vscode.ExtensionContext) {
 	//runs whenever the user saves a file (also runs when the file is autosaved)
 	const disposable = vscode.workspace.onDidSaveTextDocument(async (textDoc : vscode.TextDocument) => {
 		//checks the fileType and makes sure its .env (checks the type after the first instance of a dot)
-		let fileType: string | undefined = (textDoc.fileName.split("/")?.at(-1))?.split(".")?.at(1);
-
-		if(fileType === undefined || fileType !== "env") {
+		let filePath: string[] | undefined = textDoc.fileName.split("/");
+		let fileName: string[] | undefined = filePath?.at(-1)?.split(".");
+		let fileType: string | undefined = fileName?.at(1);
+		
+		if(fileType === undefined || fileType !== "env" || fileName === undefined) {
 			return;
 		}
+
+		//create the file path for the example file by working backwords from above
+		fileName[1] = "env-example";
+		filePath[filePath.length-1] = fileName.reduce((acc, curVal) => acc + '.' + curVal);
+		const envExamplePath: string = filePath.reduce((acc, curVal) => acc + '/' + curVal);
 
 		//check if the user already accepted or rejected that they want this .env file to have a .env-example file auto generated
 		let decision: any = canModifyEnvPerm.get(textDoc.fileName);
@@ -34,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
 		
 		//this code updates or creates the .env-example file
 		try {
-			await vscode.workspace.fs.writeFile(URI.parse("file://" + textDoc.fileName + "-example"), 
+			await vscode.workspace.fs.writeFile(URI.parse("file://" + envExamplePath), 
 																					new TextEncoder().encode(removeValFromEnv(textDoc.getText())));//this writes regardless if there is a file there or not
 		} catch(error: any) {
 			let errorNotifToggle: boolean | null | undefined = vscode.workspace.getConfiguration("env-example-auto-generator")?.get("Error-Notifications");

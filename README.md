@@ -9,14 +9,13 @@ Keeps your `.env-example` file automatically synced with your `.env` file, remov
 
 * Asks the user if it should keep a `.env-example` file in sync with the currently opened `.env` file at the first save.
 <div style="text-align: center;  margin: 0 auto;">
-  <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/prompt/yes%20-%202/yes.gif?raw=true" width="33%" />
-  <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/prompt/no/no.gif?raw=true" width="33%" />
-  <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/prompt/x/x.gif?raw=true" width="33%" />
+  <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/prompt/yes%20-%202/yes.gif?raw=true" width="32.5%" />
+  <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/prompt/no/no.gif?raw=true" width="32.5%" />
+  <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/prompt/x/x.gif?raw=true" width="32.5%" />
 </div>
 
 
 * Updates the `.env-example` file every time the user saves the `.env` file and supports all `*.env` files.
-
 <div style="text-align: center;  margin: 0 auto;">
   <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/other%20file%20types/other%20file%20types.gif?raw=true" width="50%" />
 </div>
