@@ -15,7 +15,7 @@ Keeps your `.env-example` file automatically synced with your `.env` file, remov
 </div>
 
 
-* Updates the `.env-example` file every time the user saves the `.env` file and supports all `*.env` files.
+* Updates the `.env-example` file every time the user saves the `.env` file and supports all `*.env.*` files.
 <div style="text-align: center;  margin: 0 auto;">
   <img src="https://github.com/AbdelhalemKassara/env-example_auto_generator/blob/main/demo%20videos/other%20file%20types/other%20file%20types.gif?raw=true" width="50%" />
 </div>
