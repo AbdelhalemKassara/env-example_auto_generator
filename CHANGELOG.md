@@ -4,6 +4,10 @@ All notable changes to the "env-example-auto-generator" extension will be docume
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.1.0] - 2024-12-26
+### Changed
+- The example filename from `*.env.*-example` to `*.env-example.*`.
+
 ## [1.0.0] - 2024-12-23
 ### Added
 - Add `*.env.*` with `.env.
@@ -12,7 +16,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Button at the top of the text editor to stop synchronizing the `.env` file with the `.env-example` file.
 - Error notifications for invalidly formatted `.env` files that the user know why the `.env-example` file wasn't updated.
 - A settings option to disable the error notifications.
-### Changed
 
 ## [0.0.2] - 2024-12-19
 
