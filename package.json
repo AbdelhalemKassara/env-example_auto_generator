@@ -2,11 +2,11 @@
   "name": "env-example-auto-generator",
   "displayName": "env-example Auto Generator",
   "description": "auto prompts the user to create an .env-example when an .env file is detected and keeps it in sync",
-  "publisher" : "AbdelhalemKassara",
-  "version": "1.1.0",
+  "publisher": "AbdelhalemKassara",
+  "version": "1.1.1",
   "homepage": "https://github.com/AbdelhalemKassara/env-example_auto_generator",
-  "icon" : "./icon/icon.png",
-  "preview" : false,
+  "icon": "./icon/icon.png",
+  "preview": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/AbdelhalemKassara/env-example_auto_generator"
@@ -15,12 +15,12 @@
     "color": "#C80000",
     "theme": "dark"
   },
-  "license" : "GPL-2.0-only",
-  "pricing" : "Free",
+  "license": "GPL-2.0-only",
+  "pricing": "Free",
   "author": {
     "name": "Abdelhalem Kassara"
   },
-  "bugs" : {
+  "bugs": {
     "url": "https://github.com/AbdelhalemKassara/env-example_auto_generator/issues"
   },
   "engines": {
@@ -46,12 +46,12 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "configuration" : {
-      "title" : "env-example Auto Generator",
+    "configuration": {
+      "title": "env-example Auto Generator",
       "properties": {
         "env-example-auto-generator.Error-Notifications": {
-          "type" : "boolean",
-          "default" : true,
+          "type": "boolean",
+          "default": true,
           "description": "Toggles whether or not to display error notifications for invalidly formatted .env files."
         }
       }
@@ -60,31 +60,31 @@
       {
         "command": "env-example-auto-generator.generateEnvExample",
         "title": "Generate .env-example",
-        "icon" : {
+        "icon": {
           "light": "icon/env-ex-light.svg",
-          "dark" : "icon/env-ex-dark.svg"
+          "dark": "icon/env-ex-dark.svg"
         }
       },
       {
         "command": "env-example-auto-generator.stopGeneratingEnvExample",
         "title": "Generate .env-example",
-        "icon" : {
+        "icon": {
           "light": "icon/env-ex-cross-light.svg",
-          "dark" : "icon/env-ex-cross-dark.svg"
+          "dark": "icon/env-ex-cross-dark.svg"
         }
       }
     ],
     "menus": {
       "editor/title": [
         {
-          "command" : "env-example-auto-generator.generateEnvExample",
+          "command": "env-example-auto-generator.generateEnvExample",
           "group": "navigation",
-          "when" : "resourceFilename =~ /\\.env($|[\\.])/"
+          "when": "resourceFilename =~ /\\.env($|[\\.])/"
         },
         {
-          "command" : "env-example-auto-generator.stopGeneratingEnvExample",
+          "command": "env-example-auto-generator.stopGeneratingEnvExample",
           "group": "navigation",
-          "when" : "resourceFilename =~ /\\.env($|[\\.])/"
+          "when": "resourceFilename =~ /\\.env($|[\\.])/"
         }
       ]
     }
@@ -97,11 +97,11 @@
     "lint": "eslint src",
     "testOriginal": "vscode-test",
     "test": "jest /out --watchAll --verbose",
-    "package" : "vsce package",
+    "package": "vsce package",
     "publishMin": "vsce login AbdelhalemKassara && vsce publish minor",
     "publishMaj": "vsce login AbdelhalemKassara && vsce publish major",
     "publishPat": "vsce login AbdelhalemKassara && vsce publish patch",
-    "publish" : "vsce login AbdelhalemKassara && vsce publish"
+    "publish": "vsce login AbdelhalemKassara && vsce publish"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -110,6 +110,7 @@
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.7.0",
     "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.2.1",
     "eslint": "^9.13.0",
     "jest": "^29.7.0",
     "typescript": "^5.6.3"
