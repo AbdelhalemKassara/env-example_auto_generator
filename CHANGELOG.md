@@ -4,6 +4,10 @@ All notable changes to the "env-example-auto-generator" extension will be docume
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.1.1] - 2024-12-26
+### Changed
+- Ran into an unreproducible error where dev dependecies where also being packaged.
+
 ## [1.1.0] - 2024-12-26
 ### Changed
 - The example filename from `*.env.*-example` to `*.env-example.*`.
